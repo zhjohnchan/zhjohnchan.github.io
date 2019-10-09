@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="Zhihong Chen">
 <meta property="og:description" content="Definition of continuityLet $f: D \rightarrow R$ be a function, where $D$ is an interval and let $c\in D$. Then f is said to be continuous at $c$ if for every $\epsilon &amp;gt; 0$, there exists a $\delt">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-08T11:17:10.200Z">
+<meta property="og:updated_time" content="2019-10-09T13:59:17.159Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[Calculus] Quick Review for Tutorial 4">
 <meta name="twitter:description" content="Definition of continuityLet $f: D \rightarrow R$ be a function, where $D$ is an interval and let $c\in D$. Then f is said to be continuous at $c$ if for every $\epsilon &amp;gt; 0$, there exists a $\delt">
@@ -49,8 +49,7 @@
     
 </head>
 
-<body class="max-width mx-auto px3 ltr">
-    
+<body class="max-width mx-auto px3 ltr">    
       <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
   <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
   <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
@@ -145,11 +144,11 @@
 </ol>
 <p>$$|f(x)-f(c)|&lt;\epsilon,\  for\ all\ x \in D\ satisfying\ |x-c|&lt;\delta.$$</p>
 <ol start="2">
-<li><p>The theorem of limits of continuous functions<br>if $f(x)$ is continuous  at a point b and $lim_{x\rightarrow c}g(x)=b$<br>$$lim_{x\rightarrow c}f(g(x))=f(lim_{x\rightarrow c}g(x))=f(b)$$</p>
+<li><p>The theorem of limits of continuous functions<br>if $f(x)$ is continuous  at a point b and $lim_{x\rightarrow c}g(x)=b$,<br>$$lim_{x\rightarrow c}f(g(x))=f(lim_{x\rightarrow c}g(x))=f(b)$$.</p>
 </li>
 <li><p>The kinds of discontinuous<br>1) Removable discontinuities<br>2) Jumping discontinuities<br>3) Essential discontinuities</p>
 </li>
-<li><p>A Computational Technique<br>if $lim_{x\rightarrow c} {f(x) \over g(x)} = 1$, we can replace $f(x)$ with $g(x)$ when computing the limit of $f(x)h(x)$</p>
+<li><p>A Computational Technique<br>if $lim_{x\rightarrow c} {f(x) \over g(x)} = 1$, we can replace $f(x)$ with $g(x)$ when computing the limit of $f(x)h(x)$.</p>
 </li>
 </ol>
 
@@ -243,8 +242,23 @@
 
 <!-- Baidu Analytics -->
 
-<!-- Disqus Comments --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<!-- Disqus Comments -->
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
