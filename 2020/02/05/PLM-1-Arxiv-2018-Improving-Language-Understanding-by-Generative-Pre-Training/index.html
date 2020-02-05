@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="背景 动机：（1）未知何种优化目标学习到的文本表征是最有利于迁移；（2）没有一种统一有效的方法迁移学习到的文本表征到目标任务上。  工作：本文探索了一种半监督的语言理解方法，结合了无监督的预训练（pre-training）和有监督的微调（fine-tuning）。  目标：学习一种通用的表征，能够通过小的调整迁移到不同的任务中。  前提假设：大量的未标记文本以及几种人工标记的数据集。  方法：">
+<meta name="keywords" content="Pretrained Language Model">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training">
+<meta property="og:url" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/index.html">
+<meta property="og:site_name" content="Zhihong Chen">
+<meta property="og:description" content="背景 动机：（1）未知何种优化目标学习到的文本表征是最有利于迁移；（2）没有一种统一有效的方法迁移学习到的文本表征到目标任务上。  工作：本文探索了一种半监督的语言理解方法，结合了无监督的预训练（pre-training）和有监督的微调（fine-tuning）。  目标：学习一种通用的表征，能够通过小的调整迁移到不同的任务中。  前提假设：大量的未标记文本以及几种人工标记的数据集。  方法：">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205172527217.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205184147394.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205184357604.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205185557163.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205185619137.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205185805380.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205185947286.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205192131050.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205192258795.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205192352731.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205192714585.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205193139585.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205193351111.png">
+<meta property="og:updated_time" content="2020-02-05T11:36:24.986Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training">
+<meta name="twitter:description" content="背景 动机：（1）未知何种优化目标学习到的文本表征是最有利于迁移；（2）没有一种统一有效的方法迁移学习到的文本表征到目标任务上。  工作：本文探索了一种半监督的语言理解方法，结合了无监督的预训练（pre-training）和有监督的微调（fine-tuning）。  目标：学习一种通用的表征，能够通过小的调整迁移到不同的任务中。  前提假设：大量的未标记文本以及几种人工标记的数据集。  方法：">
+<meta name="twitter:image" content="http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205172527217.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/02/04/MRG-1-CVPR-2016-Learning-to-Read-Chest-X-Rays-1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&text=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&is_video=false&description=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training&body=Check out this article: http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&name=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-相关工作"><span class="toc-number">2.</span> <span class="toc-text">2. 相关工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-NLP半监督学习"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 NLP半监督学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-无监督预训练"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 无监督预训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-辅助训练目标"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 辅助训练目标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-框架"><span class="toc-number">3.</span> <span class="toc-text">3. 框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-无监督预训练"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 无监督预训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-有监督微调"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 有监督微调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-任务特定的输入转换"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 任务特定的输入转换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-实验"><span class="toc-number">4.</span> <span class="toc-text">4. 实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-设置"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-监督微调"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 监督微调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-分析"><span class="toc-number">4.3.</span> <span class="toc-text">5. 分析</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        [PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Zhihong Chen</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-02-05T09:23:10.000Z" itemprop="datePublished">2020-02-05</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Pretrained-Language-Model/">Pretrained Language Model</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205172527217.png" alt="image-20200205172527217" style="zoom:50%;">
+
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><ul>
+<li><p>动机：（1）未知何种优化目标学习到的文本表征是最有利于迁移；（2）没有一种统一有效的方法迁移学习到的文本表征到目标任务上。</p>
+</li>
+<li><p>工作：本文探索了一种半监督的语言理解方法，结合了无监督的预训练（pre-training）和有监督的微调（fine-tuning）。</p>
+</li>
+<li><p>目标：学习一种通用的表征，能够通过小的调整迁移到不同的任务中。</p>
+</li>
+<li><p>前提假设：大量的未标记文本以及几种人工标记的数据集。</p>
+</li>
+<li><p>方法：（1）使用语言模型（Language Model）目标函数进行预训练；（2）使用有监督的目标函数在下游任务上进行参数微调。</p>
+</li>
+<li><p>模型结构：（1）使用Transformer；（2）迁移（transfer）阶段，使用任务特定的输入适应，处理结构化的文本输入成单一的连续token序列。</p>
+</li>
+<li><p>效果：（1）在四种语言理解任务上进行测试（natural language inference，question answering，semantic similarity，text classification）；（2）在12个任务中取得了9个SOTAs。</p>
+</li>
+</ul>
+<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2. 相关工作"></a>2. 相关工作</h2><h3 id="2-1-NLP半监督学习"><a href="#2-1-NLP半监督学习" class="headerlink" title="2.1 NLP半监督学习"></a>2.1 NLP半监督学习</h3><ul>
+<li>早期的方法统计无标记文本的数据，并且作为监督任务的特征。</li>
+<li>利用word embedding在无标记文本上训练，但是它们主要迁移word-level的信息，而本文capture更high level的语义。</li>
+</ul>
+<h3 id="2-2-无监督预训练"><a href="#2-2-无监督预训练" class="headerlink" title="2.2 无监督预训练"></a>2.2 无监督预训练</h3><ul>
+<li>目前，图像上有很广泛的应用。</li>
+<li>目前pre-training的工作使用的是LSTM，而没有用到Transformer。</li>
+</ul>
+<h3 id="2-3-辅助训练目标"><a href="#2-3-辅助训练目标" class="headerlink" title="2.3 辅助训练目标"></a>2.3 辅助训练目标</h3><ul>
+<li>目前，在目标任务上加上Language Model 目标函数。</li>
+</ul>
+<h2 id="3-框架"><a href="#3-框架" class="headerlink" title="3. 框架"></a>3. 框架</h2><p>训练步骤分为两步：（1）首先在无标记文本上学习一个高性能的语言模型；（2）然后在具体的任务上进行有监督的训练。</p>
+<h3 id="3-1-无监督预训练"><a href="#3-1-无监督预训练" class="headerlink" title="3.1 无监督预训练"></a>3.1 无监督预训练</h3><ul>
+<li>给定一个无标记文本，使用标准的语言模型目标进行训练：</li>
+</ul>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205184147394.png" alt="image-20200205184147394" style="zoom:50%;">
+
+<ul>
+<li>实验中，使用了多层Transformer解码器，产生了一个关于target tokens的分布：</li>
+</ul>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205184357604.png" alt="image-20200205184357604" style="zoom:50%;">
+
+<p>其中，$U$是tokens的context vectors，$W_{e}$是token embedding matrix，$W_{p}$是position embedding matrix。</p>
+<h3 id="3-2-有监督微调"><a href="#3-2-有监督微调" class="headerlink" title="3.2 有监督微调"></a>3.2 有监督微调</h3><ul>
+<li>给定一个特定的数据集$C$，其中$x^{1}, …, x^{m}$是input tokens，$y$是标签，目标函数表示为：</li>
+</ul>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205185557163.png" alt="image-20200205185557163" style="zoom:50%;">
+
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205185619137.png" alt="image-20200205185619137" style="zoom:50%;">
+
+<ul>
+<li>除此之外，增加了Language Model的目标函数作为辅助目标函数，目的是（1）增加泛化性能；（2）加速收敛。</li>
+</ul>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205185805380.png" alt="image-20200205185805380" style="zoom:50%;">
+
+<p>此时，需要额外训练的参数为$W_{y}$以及新的token embedding。</p>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205185947286.png" alt="image-20200205185947286" style="zoom:50%;">
+
+<h3 id="3-3-任务特定的输入转换"><a href="#3-3-任务特定的输入转换" class="headerlink" title="3.3 任务特定的输入转换"></a>3.3 任务特定的输入转换</h3><ul>
+<li>为了避免在不同的任务中大量的改变，引入了一种检索式的方法，将结构化的输入转化为顺序序列。</li>
+<li>Textual entailment：合并了premise p和假设h，并且在中间加入了$。</li>
+<li>Similarity：在这个任务中，句子没有顺序关系，因此同时处理了两种顺序，并且生成两个序列表示$h_{l}^{m}$，加于线性输出层之前。</li>
+<li>Question Answering and Commonsense Reasoning：在这个任务中，给定了文档、问题和答案，合并这三者，并且在答案之前加上$。</li>
+</ul>
+<h2 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h2><h3 id="4-1-设置"><a href="#4-1-设置" class="headerlink" title="4.1 设置"></a>4.1 设置</h3><ul>
+<li>无监督预训练：BooksCorpus数据集，其中有700本未出版的书；1B Word Benchmark，ELMo所使用。</li>
+<li>模型结构：12层decoder-only的transformer（768维状态，12个关注头）。</li>
+</ul>
+<h3 id="4-2-监督微调"><a href="#4-2-监督微调" class="headerlink" title="4.2 监督微调"></a>4.2 监督微调</h3><p><img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205192131050.png" alt="image-20200205192131050"></p>
+<ul>
+<li>Natural language inference：</li>
+</ul>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205192258795.png" alt="image-20200205192258795" style="zoom:50%;">
+
+<ul>
+<li>Question answering and commonsense reasoning：</li>
+</ul>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205192352731.png" alt="image-20200205192352731" style="zoom:50%;">
+
+<ul>
+<li>Semantic similarity and classification：</li>
+</ul>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205192714585.png" alt="image-20200205192714585" style="zoom:50%;">
+
+<h3 id="5-分析"><a href="#5-分析" class="headerlink" title="5. 分析"></a>5. 分析</h3><ul>
+<li>层数的影响以及zero-shot的表现</li>
+</ul>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205193139585.png" alt="image-20200205193139585" style="zoom:50%;">
+
+<ul>
+<li>分解实验</li>
+</ul>
+<img src="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/image-20200205193351111.png" alt="image-20200205193351111" style="zoom:50%;">
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-相关工作"><span class="toc-number">2.</span> <span class="toc-text">2. 相关工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-NLP半监督学习"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 NLP半监督学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-无监督预训练"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 无监督预训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-辅助训练目标"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 辅助训练目标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-框架"><span class="toc-number">3.</span> <span class="toc-text">3. 框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-无监督预训练"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 无监督预训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-有监督微调"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 有监督微调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-任务特定的输入转换"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 任务特定的输入转换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-实验"><span class="toc-number">4.</span> <span class="toc-text">4. 实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-设置"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-监督微调"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 监督微调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-分析"><span class="toc-number">4.3.</span> <span class="toc-text">5. 分析</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&text=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&is_video=false&description=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training&body=Check out this article: http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&title=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/&name=[PLM#1] (Arxiv 2018) Improving Language Understanding by Generative Pre-Training&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Zhihong Chen
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
