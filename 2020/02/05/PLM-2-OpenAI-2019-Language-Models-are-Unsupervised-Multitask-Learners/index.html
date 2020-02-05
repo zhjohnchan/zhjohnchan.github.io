@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="1. 背景 动机：（1）单个域的单个任务上的训练缺乏泛化性能；（2）多任务训练意味着需要更多的训练数据来实现良好的泛化性能；（3）目前的PLM仍需要具体任务进行fine-tuning。 贡献点：（1）连接了两类工作（预训练和多任务学习），继续探索迁移；（2）展示了Language Model可以以zero-shot形式应用到下游任务。  2. 方法 方法的本质：语言建模（Language Mo">
+<meta name="keywords" content="Pretrained Language Model">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners">
+<meta property="og:url" content="http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/index.html">
+<meta property="og:site_name" content="Zhihong Chen">
+<meta property="og:description" content="1. 背景 动机：（1）单个域的单个任务上的训练缺乏泛化性能；（2）多任务训练意味着需要更多的训练数据来实现良好的泛化性能；（3）目前的PLM仍需要具体任务进行fine-tuning。 贡献点：（1）连接了两类工作（预训练和多任务学习），继续探索迁移；（2）展示了Language Model可以以zero-shot形式应用到下游任务。  2. 方法 方法的本质：语言建模（Language Mo">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205195815668.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205211618696.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205230840083.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205222557460.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/johnchen/Documents/My%20Blog/source/_posts/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205224007038.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205225553724.png">
+<meta property="og:updated_time" content="2020-02-05T15:21:59.050Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners">
+<meta name="twitter:description" content="1. 背景 动机：（1）单个域的单个任务上的训练缺乏泛化性能；（2）多任务训练意味着需要更多的训练数据来实现良好的泛化性能；（3）目前的PLM仍需要具体任务进行fine-tuning。 贡献点：（1）连接了两类工作（预训练和多任务学习），继续探索迁移；（2）展示了Language Model可以以zero-shot形式应用到下游任务。  2. 方法 方法的本质：语言建模（Language Mo">
+<meta name="twitter:image" content="http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205195815668.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/02/05/PLM-1-Arxiv-2018-Improving-Language-Understanding-by-Generative-Pre-Training/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&text=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&is_video=false&description=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners&body=Check out this article: http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&name=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-背景"><span class="toc-number">1.</span> <span class="toc-text">1. 背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-方法"><span class="toc-number">2.</span> <span class="toc-text">2. 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-训练数据集"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 训练数据集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-输入表示"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 输入表示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-模型"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-实验"><span class="toc-number">3.</span> <span class="toc-text">3. 实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-语言建模"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 语言建模</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-泛化与记忆"><span class="toc-number">4.</span> <span class="toc-text">4. 泛化与记忆</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        [PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Zhihong Chen</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-02-05T11:57:15.000Z" itemprop="datePublished">2020-02-05</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Pretrained-Language-Model/">Pretrained Language Model</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <img src="/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205195815668.png" alt="image-20200205195815668" style="zoom:50%;">
+
+<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><ul>
+<li>动机：（1）单个域的单个任务上的训练缺乏泛化性能；（2）多任务训练意味着需要更多的训练数据来实现良好的泛化性能；（3）目前的PLM仍需要具体任务进行fine-tuning。</li>
+<li>贡献点：（1）连接了两类工作（预训练和多任务学习），继续探索迁移；（2）展示了Language Model可以以zero-shot形式应用到下游任务。</li>
+</ul>
+<h2 id="2-方法"><a href="#2-方法" class="headerlink" title="2. 方法"></a>2. 方法</h2><ul>
+<li>方法的本质：语言建模（Language Modeling）。</li>
+</ul>
+<img src="/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205211618696.png" alt="image-20200205211618696" style="zoom:50%;">
+
+<ul>
+<li><strong>猜测：好的语言模型将能够infer和perform语言序列中的任务。</strong></li>
+</ul>
+<img src="/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205230840083.png" alt="image-20200205230840083" style="zoom:50%;">
+
+<h3 id="2-1-训练数据集"><a href="#2-1-训练数据集" class="headerlink" title="2.1 训练数据集"></a>2.1 训练数据集</h3><ul>
+<li><p>目标：建立一个尽可能大且多样的数据集。一个可能的数据集：Common Crawl。</p>
+</li>
+<li><p>结果：WebText包含45m个链接。</p>
+</li>
+</ul>
+<h3 id="2-2-输入表示"><a href="#2-2-输入表示" class="headerlink" title="2.2 输入表示"></a>2.2 输入表示</h3><ul>
+<li><p>Byte Pair Encoding (BPE)在Unicode code points上实现的话，字典大小将会是130,000。Byte-level的BPE将容易导致sub-optimal。</p>
+</li>
+<li><p>方案：To avoid this, we prevent BPE from merging across character categories for any byte sequence. We add an exception for spaces which significantly improves the compression efficiency while adding only minimal fragmentation of words across multiple vocab tokens.</p>
+</li>
+<li><p>优点：（1）混合word-level和Byte-level的LM；（2）能够处理任何unicode字符串，因此能够处理任何数据集，无需pre-processing，tokenization，vocab size。</p>
+</li>
+</ul>
+<h3 id="2-3-模型"><a href="#2-3-模型" class="headerlink" title="2.3 模型"></a>2.3 模型</h3><ul>
+<li>模型上与GPT模型类似，除了一些小改动。</li>
+</ul>
+<h2 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h2><ul>
+<li>训练了四个语言模型，最小等效于GPT，最大的为GPT-2：</li>
+</ul>
+<img src="/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205222557460.png" alt="image-20200205222557460" style="zoom:50%;">
+
+<h3 id="3-1-语言建模"><a href="#3-1-语言建模" class="headerlink" title="3.1 语言建模"></a>3.1 语言建模</h3><ul>
+<li>Zero-shot setting的实验结果，在七个任务中取得了SOTAs。</li>
+</ul>
+<img src="/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/johnchen/Documents/My Blog/source/_posts/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205224007038.png" alt="image-20200205224007038" style="zoom:50%;">
+
+<h2 id="4-泛化与记忆"><a href="#4-泛化与记忆" class="headerlink" title="4. 泛化与记忆"></a>4. 泛化与记忆</h2><ul>
+<li>背景：训练集与测试集数据的overlap。</li>
+<li>方案：构建了Bloom过滤器，计算8-grams在测试集和训练集同时出现的概率。</li>
+</ul>
+<img src="/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/image-20200205225553724.png" alt="image-20200205225553724" style="zoom:50%;">
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-背景"><span class="toc-number">1.</span> <span class="toc-text">1. 背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-方法"><span class="toc-number">2.</span> <span class="toc-text">2. 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-训练数据集"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 训练数据集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-输入表示"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 输入表示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-模型"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-实验"><span class="toc-number">3.</span> <span class="toc-text">3. 实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-语言建模"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 语言建模</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-泛化与记忆"><span class="toc-number">4.</span> <span class="toc-text">4. 泛化与记忆</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&text=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&is_video=false&description=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners&body=Check out this article: http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&title=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/05/PLM-2-OpenAI-2019-Language-Models-are-Unsupervised-Multitask-Learners/&name=[PLM#2] (OpenAI 2019) Language Models are Unsupervised Multitask Learners&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Zhihong Chen
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
