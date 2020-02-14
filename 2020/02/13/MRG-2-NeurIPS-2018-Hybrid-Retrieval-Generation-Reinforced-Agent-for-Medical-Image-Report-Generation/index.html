@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="一句话总结：应用了分级决策过程，对于每个句子，选择从模板库中提取或者直接生成。 1. 背景 难点：（1）报告长，包含多个句子；（2）不同domain有着不同的专用词；（3）句子顺序。 动机：（1）finding部分通常符合一点的顺序：heart size, mediastinum contour, lung opacity, remarkable abnormalities, mild or p">
+<meta name="keywords" content="Medical Report Generation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation">
+<meta property="og:url" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/index.html">
+<meta property="og:site_name" content="Zhihong Chen">
+<meta property="og:description" content="一句话总结：应用了分级决策过程，对于每个句子，选择从模板库中提取或者直接生成。 1. 背景 难点：（1）报告长，包含多个句子；（2）不同domain有着不同的专用词；（3）句子顺序。 动机：（1）finding部分通常符合一点的顺序：heart size, mediastinum contour, lung opacity, remarkable abnormalities, mild or p">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200213210300249.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214161410962.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214161521009.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214171641428.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214172310014.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214173200788.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214173102350.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214173117049.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214184127053.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214184415098.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214184449341.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214191310741.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214193328429.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214193357759.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214193432982.png">
+<meta property="og:updated_time" content="2020-02-14T11:37:43.442Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation">
+<meta name="twitter:description" content="一句话总结：应用了分级决策过程，对于每个句子，选择从模板库中提取或者直接生成。 1. 背景 难点：（1）报告长，包含多个句子；（2）不同domain有着不同的专用词；（3）句子顺序。 动机：（1）finding部分通常符合一点的顺序：heart size, mediastinum contour, lung opacity, remarkable abnormalities, mild or p">
+<meta name="twitter:image" content="http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200213210300249.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/02/12/Arxiv-1-Feb-12-2020/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&text=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&is_video=false&description=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation&body=Check out this article: http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&name=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-背景"><span class="toc-number">1.</span> <span class="toc-text">1. 背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-相关工作"><span class="toc-number">2.</span> <span class="toc-text">2. 相关工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-方法"><span class="toc-number">3.</span> <span class="toc-text">3. 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-检索生成的强化智能体"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 检索生成的强化智能体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-分层强化学习"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 分层强化学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-实验和分析"><span class="toc-number">4.</span> <span class="toc-text">4. 实验和分析</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        [MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Zhihong Chen</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-02-13T13:01:56.000Z" itemprop="datePublished">2020-02-13</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Medical-Report-Generation/">Medical Report Generation</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200213210300249.png" alt="image-20200213210300249"></p>
+<p><strong>一句话总结：</strong>应用了分级决策过程，对于每个句子，选择从模板库中提取或者直接生成。</p>
+<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><ul>
+<li>难点：（1）报告长，包含多个句子；（2）不同domain有着不同的专用词；（3）句子顺序。</li>
+<li>动机：（1）finding部分通常符合一点的顺序：heart size, mediastinum contour, lung opacity, remarkable abnormalities, mild or potential abnormalities；（2）目前SOTA的描述生成模型在这个任务上表现较差，原因：正常的报告多，异常的报告少并且多样；（3）检索模型在这个任务上表现好；（3）医生写报告通常都是使用对于疾病的模板，并且在上面修改。</li>
+<li>贡献：（1）通过强化学习结合了基于检索和基于学习的生成方式；（2）检索和学习模块通过策略学习进行更新；</li>
+</ul>
+<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2. 相关工作"></a>2. 相关工作</h2><ul>
+<li>视觉描述和报告生成：目前的描述模型在生成长文本的表现不佳。</li>
+<li>基于模板的句子生成：（1）ACL 2018中有一篇文章，将检索机制作为潜在的引导；（2）本文方法和pointer-generator相近，区别在于：1）本文方法目的在于从模板库中进行选择；2）检索生成是离散的动作。</li>
+<li>句子生成中的强化学习：（1）策略梯度；（2）分级强化学习。</li>
+</ul>
+<h2 id="3-方法"><a href="#3-方法" class="headerlink" title="3. 方法"></a>3. 方法</h2><p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214161410962.png" alt="image-20200214161410962"></p>
+<h3 id="3-1-检索生成的强化智能体"><a href="#3-1-检索生成的强化智能体" class="headerlink" title="3.1 检索生成的强化智能体"></a>3.1 检索生成的强化智能体</h3><ul>
+<li>图像编码器</li>
+<li>句子解码器：生成topic state和stop control：</li>
+</ul>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214161521009.png" alt="image-20200214161521009"></p>
+<ul>
+<li>检索策略模块：给定topic state，首先预测是选择模板还是序列生成：</li>
+</ul>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214171641428.png" alt="image-20200214171641428"></p>
+<ul>
+<li>生成模块：生成模块基于topic state和context vector进行生成（原文中第一个公式出错）：</li>
+</ul>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214172310014.png" alt="image-20200214172310014"></p>
+<ul>
+<li>奖励模块：包含了句子奖励和单词奖励（公式又错了）：</li>
+</ul>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214173200788.png" alt="image-20200214173200788"></p>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214173102350.png" alt="image-20200214173102350"></p>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214173117049.png" alt="image-20200214173117049"></p>
+<h3 id="3-2-分层强化学习"><a href="#3-2-分层强化学习" class="headerlink" title="3.2 分层强化学习"></a>3.2 分层强化学习</h3><p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214184127053.png" alt="image-20200214184127053"></p>
+<ul>
+<li>检索策略模块的策略更新：</li>
+</ul>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214184415098.png" alt="image-20200214184415098"></p>
+<ul>
+<li>生成模块的策略更新：</li>
+</ul>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214184449341.png" alt="image-20200214184449341"></p>
+<h2 id="4-实验和分析"><a href="#4-实验和分析" class="headerlink" title="4. 实验和分析"></a>4. 实验和分析</h2><ul>
+<li>数据集：（1）IU X-Ray：7470张前向和侧向X-ray以及对应的报告，字典：1185；（2）CX-CHR：用jieba进行tokenize，字典：1282。（3）CX-CHR：DenseNet先在ChestX-ray8上预训练；IU X-ray：DenseNet在前两者预训练。</li>
+<li>模板库：用文档频率选择模板，把意思相同的组到一起作为同一种模板。IU-X-ray：28模板（词频大于100），CX-CHR：97个模板（词频大于500）。同一组的模板，只用词频最高的。</li>
+</ul>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214191310741.png" alt="image-20200214191310741"></p>
+<ul>
+<li>测试指标：（1）自动指标（BLEU等）；（2）医学异常检测准确度；（3）人为评测。</li>
+<li>训练细节：（1）学习率：先5e-4训30epochs再5e-5强化学习finetune30个epochs；（2）IU X-Ray：最大数量句子7，最大句子长度15；CX-CHR：最大句子数量17，最大句子长度44；（3）观察到测试的时候，会所有的样本预测成同一句话（确实！！！），采取了相应的后处理：选了四个关键词（’heart size and mediastinal contours’, ’pleural effusion or pneumothorax’, ’consolidation’, and ’lungs are clear’），如果生成的报告没有包含这些关键词，就会后处理把他们处理成正常（提升了BLEU）（不过好像没有解决相应的问题）。</li>
+<li>Baseline：CNN- RNN, LRCN, AdaAtt, and Att2in。</li>
+<li>实验结果：</li>
+</ul>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214193328429.png" alt="image-20200214193328429"></p>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214193357759.png" alt="image-20200214193357759"></p>
+<p><img src="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/image-20200214193432982.png" alt="image-20200214193432982"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-背景"><span class="toc-number">1.</span> <span class="toc-text">1. 背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-相关工作"><span class="toc-number">2.</span> <span class="toc-text">2. 相关工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-方法"><span class="toc-number">3.</span> <span class="toc-text">3. 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-检索生成的强化智能体"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 检索生成的强化智能体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-分层强化学习"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 分层强化学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-实验和分析"><span class="toc-number">4.</span> <span class="toc-text">4. 实验和分析</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&text=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&is_video=false&description=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation&body=Check out this article: http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&title=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/&name=[MRG#2] (NeurIPS 2018) Hybrid Retrieval-Generation Reinforced Agent for Medical Image Report Generation&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Zhihong Chen
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
