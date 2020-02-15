@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="1. Pytorch与Tensorflow详解. 表示学习，分布式表示技术2. 文本领域中的Disentangling3. 深度神经网络与BP算法详解4. RNN与Vanishing/Exploding Gradient5. LSTM与GRU6. Seq2Seq与注意力机制7. Greedy Decoding与Beam Search8. BI-LSTM-CRF模型9. Neural Turing">
+<meta name="keywords" content="Natural Language Processing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[NLP#4] Deep learning and NLP">
+<meta property="og:url" content="http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/index.html">
+<meta property="og:site_name" content="Zhihong Chen">
+<meta property="og:description" content="1. Pytorch与Tensorflow详解. 表示学习，分布式表示技术2. 文本领域中的Disentangling3. 深度神经网络与BP算法详解4. RNN与Vanishing/Exploding Gradient5. LSTM与GRU6. Seq2Seq与注意力机制7. Greedy Decoding与Beam Search8. BI-LSTM-CRF模型9. Neural Turing">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-15T14:33:14.449Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[NLP#4] Deep learning and NLP">
+<meta name="twitter:description" content="1. Pytorch与Tensorflow详解. 表示学习，分布式表示技术2. 文本领域中的Disentangling3. 深度神经网络与BP算法详解4. RNN与Vanishing/Exploding Gradient5. LSTM与GRU6. Seq2Seq与注意力机制7. Greedy Decoding与Beam Search8. BI-LSTM-CRF模型9. Neural Turing">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>[NLP#4] Deep learning and NLP</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/02/15/NLP-5-Bayesian-Model-and-NLP/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/02/15/NLP-3-Information-extraction-word-vectors-and-knowledge-graphs/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&text=[NLP#4] Deep learning and NLP"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&is_video=false&description=[NLP#4] Deep learning and NLP"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[NLP#4] Deep learning and NLP&body=Check out this article: http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&name=[NLP#4] Deep learning and NLP&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Pytorch与Tensorflow详解-表示学习，分布式表示技术"><span class="toc-number">1.</span> <span class="toc-text">1. Pytorch与Tensorflow详解. 表示学习，分布式表示技术</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-文本领域中的Disentangling"><span class="toc-number">2.</span> <span class="toc-text">2. 文本领域中的Disentangling</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-深度神经网络与BP算法详解"><span class="toc-number">3.</span> <span class="toc-text">3. 深度神经网络与BP算法详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-RNN与Vanishing-Exploding-Gradient"><span class="toc-number">4.</span> <span class="toc-text">4. RNN与Vanishing/Exploding Gradient</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-LSTM与GRU"><span class="toc-number">5.</span> <span class="toc-text">5. LSTM与GRU</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Seq2Seq与注意力机制"><span class="toc-number">6.</span> <span class="toc-text">6. Seq2Seq与注意力机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Greedy-Decoding与Beam-Search"><span class="toc-number">7.</span> <span class="toc-text">7. Greedy Decoding与Beam Search</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-BI-LSTM-CRF模型"><span class="toc-number">8.</span> <span class="toc-text">8. BI-LSTM-CRF模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Neural-Turing-Machine"><span class="toc-number">9.</span> <span class="toc-text">9. Neural Turing Machine</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Memory-Network"><span class="toc-number">10.</span> <span class="toc-text">10. Memory Network</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-Self-Attention，Transformer以及Transformer-XL"><span class="toc-number">11.</span> <span class="toc-text">11. Self Attention，Transformer以及Transformer-XL</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-Bert的详解"><span class="toc-number">12.</span> <span class="toc-text">12. Bert的详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-BERT-BiLSTM-CRF"><span class="toc-number">13.</span> <span class="toc-text">13. BERT-BiLSTM-CRF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-GPT，MASS-XLNet"><span class="toc-number">14.</span> <span class="toc-text">14. GPT，MASS, XLNet</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#15-Low-resource-learning"><span class="toc-number">15.</span> <span class="toc-text">15. Low-resource learning</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#16-深度学习的可视化"><span class="toc-number">16.</span> <span class="toc-text">16. 深度学习的可视化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#17-Laywer-wise-Relevance-Propagation"><span class="toc-number">17.</span> <span class="toc-text">17. Laywer-wise Relevance Propagation</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        [NLP#4] Deep learning and NLP
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Zhihong Chen</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-02-15T14:21:22.000Z" itemprop="datePublished">2020-02-15</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Natural-Language-Processing/">Natural Language Processing</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="1-Pytorch与Tensorflow详解-表示学习，分布式表示技术"><a href="#1-Pytorch与Tensorflow详解-表示学习，分布式表示技术" class="headerlink" title="1. Pytorch与Tensorflow详解. 表示学习，分布式表示技术"></a>1. Pytorch与Tensorflow详解. 表示学习，分布式表示技术</h1><h1 id="2-文本领域中的Disentangling"><a href="#2-文本领域中的Disentangling" class="headerlink" title="2. 文本领域中的Disentangling"></a>2. 文本领域中的Disentangling</h1><h1 id="3-深度神经网络与BP算法详解"><a href="#3-深度神经网络与BP算法详解" class="headerlink" title="3. 深度神经网络与BP算法详解"></a>3. 深度神经网络与BP算法详解</h1><h1 id="4-RNN与Vanishing-Exploding-Gradient"><a href="#4-RNN与Vanishing-Exploding-Gradient" class="headerlink" title="4. RNN与Vanishing/Exploding Gradient"></a>4. RNN与Vanishing/Exploding Gradient</h1><h1 id="5-LSTM与GRU"><a href="#5-LSTM与GRU" class="headerlink" title="5. LSTM与GRU"></a>5. LSTM与GRU</h1><h1 id="6-Seq2Seq与注意力机制"><a href="#6-Seq2Seq与注意力机制" class="headerlink" title="6. Seq2Seq与注意力机制"></a>6. Seq2Seq与注意力机制</h1><h1 id="7-Greedy-Decoding与Beam-Search"><a href="#7-Greedy-Decoding与Beam-Search" class="headerlink" title="7. Greedy Decoding与Beam Search"></a>7. Greedy Decoding与Beam Search</h1><h1 id="8-BI-LSTM-CRF模型"><a href="#8-BI-LSTM-CRF模型" class="headerlink" title="8. BI-LSTM-CRF模型"></a>8. BI-LSTM-CRF模型</h1><h1 id="9-Neural-Turing-Machine"><a href="#9-Neural-Turing-Machine" class="headerlink" title="9. Neural Turing Machine"></a>9. Neural Turing Machine</h1><h1 id="10-Memory-Network"><a href="#10-Memory-Network" class="headerlink" title="10. Memory Network"></a>10. Memory Network</h1><h1 id="11-Self-Attention，Transformer以及Transformer-XL"><a href="#11-Self-Attention，Transformer以及Transformer-XL" class="headerlink" title="11. Self Attention，Transformer以及Transformer-XL"></a>11. Self Attention，Transformer以及Transformer-XL</h1><h1 id="12-Bert的详解"><a href="#12-Bert的详解" class="headerlink" title="12. Bert的详解"></a>12. Bert的详解</h1><h1 id="13-BERT-BiLSTM-CRF"><a href="#13-BERT-BiLSTM-CRF" class="headerlink" title="13. BERT-BiLSTM-CRF"></a>13. BERT-BiLSTM-CRF</h1><h1 id="14-GPT，MASS-XLNet"><a href="#14-GPT，MASS-XLNet" class="headerlink" title="14. GPT，MASS, XLNet"></a>14. GPT，MASS, XLNet</h1><h1 id="15-Low-resource-learning"><a href="#15-Low-resource-learning" class="headerlink" title="15. Low-resource learning"></a>15. Low-resource learning</h1><h1 id="16-深度学习的可视化"><a href="#16-深度学习的可视化" class="headerlink" title="16. 深度学习的可视化"></a>16. 深度学习的可视化</h1><h1 id="17-Laywer-wise-Relevance-Propagation"><a href="#17-Laywer-wise-Relevance-Propagation" class="headerlink" title="17. Laywer-wise Relevance Propagation"></a>17. Laywer-wise Relevance Propagation</h1>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Pytorch与Tensorflow详解-表示学习，分布式表示技术"><span class="toc-number">1.</span> <span class="toc-text">1. Pytorch与Tensorflow详解. 表示学习，分布式表示技术</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-文本领域中的Disentangling"><span class="toc-number">2.</span> <span class="toc-text">2. 文本领域中的Disentangling</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-深度神经网络与BP算法详解"><span class="toc-number">3.</span> <span class="toc-text">3. 深度神经网络与BP算法详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-RNN与Vanishing-Exploding-Gradient"><span class="toc-number">4.</span> <span class="toc-text">4. RNN与Vanishing/Exploding Gradient</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-LSTM与GRU"><span class="toc-number">5.</span> <span class="toc-text">5. LSTM与GRU</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-Seq2Seq与注意力机制"><span class="toc-number">6.</span> <span class="toc-text">6. Seq2Seq与注意力机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-Greedy-Decoding与Beam-Search"><span class="toc-number">7.</span> <span class="toc-text">7. Greedy Decoding与Beam Search</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-BI-LSTM-CRF模型"><span class="toc-number">8.</span> <span class="toc-text">8. BI-LSTM-CRF模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Neural-Turing-Machine"><span class="toc-number">9.</span> <span class="toc-text">9. Neural Turing Machine</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Memory-Network"><span class="toc-number">10.</span> <span class="toc-text">10. Memory Network</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-Self-Attention，Transformer以及Transformer-XL"><span class="toc-number">11.</span> <span class="toc-text">11. Self Attention，Transformer以及Transformer-XL</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-Bert的详解"><span class="toc-number">12.</span> <span class="toc-text">12. Bert的详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-BERT-BiLSTM-CRF"><span class="toc-number">13.</span> <span class="toc-text">13. BERT-BiLSTM-CRF</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-GPT，MASS-XLNet"><span class="toc-number">14.</span> <span class="toc-text">14. GPT，MASS, XLNet</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#15-Low-resource-learning"><span class="toc-number">15.</span> <span class="toc-text">15. Low-resource learning</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#16-深度学习的可视化"><span class="toc-number">16.</span> <span class="toc-text">16. 深度学习的可视化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#17-Laywer-wise-Relevance-Propagation"><span class="toc-number">17.</span> <span class="toc-text">17. Laywer-wise Relevance Propagation</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&text=[NLP#4] Deep learning and NLP"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&is_video=false&description=[NLP#4] Deep learning and NLP"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[NLP#4] Deep learning and NLP&body=Check out this article: http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&title=[NLP#4] Deep learning and NLP"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/15/NLP-4-Deep-learning-and-NLP/&name=[NLP#4] Deep learning and NLP&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Zhihong Chen
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

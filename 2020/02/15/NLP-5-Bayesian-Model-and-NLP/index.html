@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="1. 概率图模型与条件独立2. Markov Blanket3. Dirichlet分布、Multinomial分布4. Beta分布、Conjugate Prior回顾5. Detail Balance6. 主题模型详解7. MCMC与吉布斯采样8. 主题模型与Collapsed Gibbs Sampling9. Metropolis Hasting, Rejection Sampling10.">
+<meta name="keywords" content="Natural Language Processing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[NLP#5] Bayesian Model and NLP">
+<meta property="og:url" content="http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/index.html">
+<meta property="og:site_name" content="Zhihong Chen">
+<meta property="og:description" content="1. 概率图模型与条件独立2. Markov Blanket3. Dirichlet分布、Multinomial分布4. Beta分布、Conjugate Prior回顾5. Detail Balance6. 主题模型详解7. MCMC与吉布斯采样8. 主题模型与Collapsed Gibbs Sampling9. Metropolis Hasting, Rejection Sampling10.">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-15T14:35:41.017Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[NLP#5] Bayesian Model and NLP">
+<meta name="twitter:description" content="1. 概率图模型与条件独立2. Markov Blanket3. Dirichlet分布、Multinomial分布4. Beta分布、Conjugate Prior回顾5. Detail Balance6. 主题模型详解7. MCMC与吉布斯采样8. 主题模型与Collapsed Gibbs Sampling9. Metropolis Hasting, Rejection Sampling10.">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>[NLP#5] Bayesian Model and NLP</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/02/15/NLP-4-Deep-learning-and-NLP/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&text=[NLP#5] Bayesian Model and NLP"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&is_video=false&description=[NLP#5] Bayesian Model and NLP"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[NLP#5] Bayesian Model and NLP&body=Check out this article: http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&name=[NLP#5] Bayesian Model and NLP&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-概率图模型与条件独立"><span class="toc-number">1.</span> <span class="toc-text">1. 概率图模型与条件独立</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Markov-Blanket"><span class="toc-number">2.</span> <span class="toc-text">2. Markov Blanket</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Dirichlet分布、Multinomial分布"><span class="toc-number">3.</span> <span class="toc-text">3. Dirichlet分布、Multinomial分布</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Beta分布、Conjugate-Prior回顾"><span class="toc-number">4.</span> <span class="toc-text">4. Beta分布、Conjugate Prior回顾</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Detail-Balance"><span class="toc-number">5.</span> <span class="toc-text">5. Detail Balance</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-主题模型详解"><span class="toc-number">6.</span> <span class="toc-text">6. 主题模型详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-MCMC与吉布斯采样"><span class="toc-number">7.</span> <span class="toc-text">7. MCMC与吉布斯采样</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-主题模型与Collapsed-Gibbs-Sampling"><span class="toc-number">8.</span> <span class="toc-text">8. 主题模型与Collapsed Gibbs Sampling</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Metropolis-Hasting-Rejection-Sampling"><span class="toc-number">9.</span> <span class="toc-text">9. Metropolis Hasting, Rejection Sampling</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Langevin-Dyamics与SGLD"><span class="toc-number">10.</span> <span class="toc-text">10. Langevin Dyamics与SGLD</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-分布式SGLD与主题模型"><span class="toc-number">11.</span> <span class="toc-text">11. 分布式SGLD与主题模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-Dynamic-Topic-Model"><span class="toc-number">12.</span> <span class="toc-text">12. Dynamic Topic Model</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-Supervised-Topic-Model"><span class="toc-number">13.</span> <span class="toc-text">13. Supervised Topic Model</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-KL-Divergence与ELBO"><span class="toc-number">14.</span> <span class="toc-text">14. KL Divergence与ELBO</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#15-Variantional-Inference-Stochastic-VI"><span class="toc-number">15.</span> <span class="toc-text">15. Variantional Inference, Stochastic VI</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#16-主题模型与变分法"><span class="toc-number">16.</span> <span class="toc-text">16. 主题模型与变分法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#17-Nonparametric-Models"><span class="toc-number">17.</span> <span class="toc-text">17. Nonparametric Models</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#18-Dirichlet-Process"><span class="toc-number">18.</span> <span class="toc-text">18. Dirichlet Process</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#19-Chinese-Restarant-Process"><span class="toc-number">19.</span> <span class="toc-text">19. Chinese Restarant Process</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#20-Bayesian-Deep-Neural-Network"><span class="toc-number">20.</span> <span class="toc-text">20. Bayesian Deep Neural Network</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#21-VAE与Reparametrization-trick"><span class="toc-number">21.</span> <span class="toc-text">21. VAE与Reparametrization trick</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#22-Bayesian-RNN-LSTM"><span class="toc-number">22.</span> <span class="toc-text">22. Bayesian RNN/LSTM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#23-Bayesian-Word2Vec"><span class="toc-number">23.</span> <span class="toc-text">23. Bayesian Word2Vec</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#24-MMSB"><span class="toc-number">24.</span> <span class="toc-text">24. MMSB</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        [NLP#5] Bayesian Model and NLP
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Zhihong Chen</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-02-15T14:21:53.000Z" itemprop="datePublished">2020-02-15</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Natural-Language-Processing/">Natural Language Processing</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="1-概率图模型与条件独立"><a href="#1-概率图模型与条件独立" class="headerlink" title="1. 概率图模型与条件独立"></a>1. 概率图模型与条件独立</h1><h1 id="2-Markov-Blanket"><a href="#2-Markov-Blanket" class="headerlink" title="2. Markov Blanket"></a>2. Markov Blanket</h1><h1 id="3-Dirichlet分布、Multinomial分布"><a href="#3-Dirichlet分布、Multinomial分布" class="headerlink" title="3. Dirichlet分布、Multinomial分布"></a>3. Dirichlet分布、Multinomial分布</h1><h1 id="4-Beta分布、Conjugate-Prior回顾"><a href="#4-Beta分布、Conjugate-Prior回顾" class="headerlink" title="4. Beta分布、Conjugate Prior回顾"></a>4. Beta分布、Conjugate Prior回顾</h1><h1 id="5-Detail-Balance"><a href="#5-Detail-Balance" class="headerlink" title="5. Detail Balance"></a>5. Detail Balance</h1><h1 id="6-主题模型详解"><a href="#6-主题模型详解" class="headerlink" title="6. 主题模型详解"></a>6. 主题模型详解</h1><h1 id="7-MCMC与吉布斯采样"><a href="#7-MCMC与吉布斯采样" class="headerlink" title="7. MCMC与吉布斯采样"></a>7. MCMC与吉布斯采样</h1><h1 id="8-主题模型与Collapsed-Gibbs-Sampling"><a href="#8-主题模型与Collapsed-Gibbs-Sampling" class="headerlink" title="8. 主题模型与Collapsed Gibbs Sampling"></a>8. 主题模型与Collapsed Gibbs Sampling</h1><h1 id="9-Metropolis-Hasting-Rejection-Sampling"><a href="#9-Metropolis-Hasting-Rejection-Sampling" class="headerlink" title="9. Metropolis Hasting, Rejection Sampling"></a>9. Metropolis Hasting, Rejection Sampling</h1><h1 id="10-Langevin-Dyamics与SGLD"><a href="#10-Langevin-Dyamics与SGLD" class="headerlink" title="10. Langevin Dyamics与SGLD"></a>10. Langevin Dyamics与SGLD</h1><h1 id="11-分布式SGLD与主题模型"><a href="#11-分布式SGLD与主题模型" class="headerlink" title="11. 分布式SGLD与主题模型"></a>11. 分布式SGLD与主题模型</h1><h1 id="12-Dynamic-Topic-Model"><a href="#12-Dynamic-Topic-Model" class="headerlink" title="12. Dynamic Topic Model"></a>12. Dynamic Topic Model</h1><h1 id="13-Supervised-Topic-Model"><a href="#13-Supervised-Topic-Model" class="headerlink" title="13. Supervised Topic Model"></a>13. Supervised Topic Model</h1><h1 id="14-KL-Divergence与ELBO"><a href="#14-KL-Divergence与ELBO" class="headerlink" title="14. KL Divergence与ELBO"></a>14. KL Divergence与ELBO</h1><h1 id="15-Variantional-Inference-Stochastic-VI"><a href="#15-Variantional-Inference-Stochastic-VI" class="headerlink" title="15. Variantional Inference, Stochastic VI"></a>15. Variantional Inference, Stochastic VI</h1><h1 id="16-主题模型与变分法"><a href="#16-主题模型与变分法" class="headerlink" title="16. 主题模型与变分法"></a>16. 主题模型与变分法</h1><h1 id="17-Nonparametric-Models"><a href="#17-Nonparametric-Models" class="headerlink" title="17. Nonparametric Models"></a>17. Nonparametric Models</h1><h1 id="18-Dirichlet-Process"><a href="#18-Dirichlet-Process" class="headerlink" title="18. Dirichlet Process"></a>18. Dirichlet Process</h1><h1 id="19-Chinese-Restarant-Process"><a href="#19-Chinese-Restarant-Process" class="headerlink" title="19. Chinese Restarant Process"></a>19. Chinese Restarant Process</h1><h1 id="20-Bayesian-Deep-Neural-Network"><a href="#20-Bayesian-Deep-Neural-Network" class="headerlink" title="20. Bayesian Deep Neural Network"></a>20. Bayesian Deep Neural Network</h1><h1 id="21-VAE与Reparametrization-trick"><a href="#21-VAE与Reparametrization-trick" class="headerlink" title="21. VAE与Reparametrization trick"></a>21. VAE与Reparametrization trick</h1><h1 id="22-Bayesian-RNN-LSTM"><a href="#22-Bayesian-RNN-LSTM" class="headerlink" title="22. Bayesian RNN/LSTM"></a>22. Bayesian RNN/LSTM</h1><h1 id="23-Bayesian-Word2Vec"><a href="#23-Bayesian-Word2Vec" class="headerlink" title="23. Bayesian Word2Vec"></a>23. Bayesian Word2Vec</h1><h1 id="24-MMSB"><a href="#24-MMSB" class="headerlink" title="24. MMSB"></a>24. MMSB</h1>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-概率图模型与条件独立"><span class="toc-number">1.</span> <span class="toc-text">1. 概率图模型与条件独立</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Markov-Blanket"><span class="toc-number">2.</span> <span class="toc-text">2. Markov Blanket</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Dirichlet分布、Multinomial分布"><span class="toc-number">3.</span> <span class="toc-text">3. Dirichlet分布、Multinomial分布</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Beta分布、Conjugate-Prior回顾"><span class="toc-number">4.</span> <span class="toc-text">4. Beta分布、Conjugate Prior回顾</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Detail-Balance"><span class="toc-number">5.</span> <span class="toc-text">5. Detail Balance</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-主题模型详解"><span class="toc-number">6.</span> <span class="toc-text">6. 主题模型详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-MCMC与吉布斯采样"><span class="toc-number">7.</span> <span class="toc-text">7. MCMC与吉布斯采样</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-主题模型与Collapsed-Gibbs-Sampling"><span class="toc-number">8.</span> <span class="toc-text">8. 主题模型与Collapsed Gibbs Sampling</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-Metropolis-Hasting-Rejection-Sampling"><span class="toc-number">9.</span> <span class="toc-text">9. Metropolis Hasting, Rejection Sampling</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-Langevin-Dyamics与SGLD"><span class="toc-number">10.</span> <span class="toc-text">10. Langevin Dyamics与SGLD</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-分布式SGLD与主题模型"><span class="toc-number">11.</span> <span class="toc-text">11. 分布式SGLD与主题模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#12-Dynamic-Topic-Model"><span class="toc-number">12.</span> <span class="toc-text">12. Dynamic Topic Model</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#13-Supervised-Topic-Model"><span class="toc-number">13.</span> <span class="toc-text">13. Supervised Topic Model</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#14-KL-Divergence与ELBO"><span class="toc-number">14.</span> <span class="toc-text">14. KL Divergence与ELBO</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#15-Variantional-Inference-Stochastic-VI"><span class="toc-number">15.</span> <span class="toc-text">15. Variantional Inference, Stochastic VI</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#16-主题模型与变分法"><span class="toc-number">16.</span> <span class="toc-text">16. 主题模型与变分法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#17-Nonparametric-Models"><span class="toc-number">17.</span> <span class="toc-text">17. Nonparametric Models</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#18-Dirichlet-Process"><span class="toc-number">18.</span> <span class="toc-text">18. Dirichlet Process</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#19-Chinese-Restarant-Process"><span class="toc-number">19.</span> <span class="toc-text">19. Chinese Restarant Process</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#20-Bayesian-Deep-Neural-Network"><span class="toc-number">20.</span> <span class="toc-text">20. Bayesian Deep Neural Network</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#21-VAE与Reparametrization-trick"><span class="toc-number">21.</span> <span class="toc-text">21. VAE与Reparametrization trick</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#22-Bayesian-RNN-LSTM"><span class="toc-number">22.</span> <span class="toc-text">22. Bayesian RNN/LSTM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#23-Bayesian-Word2Vec"><span class="toc-number">23.</span> <span class="toc-text">23. Bayesian Word2Vec</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#24-MMSB"><span class="toc-number">24.</span> <span class="toc-text">24. MMSB</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&text=[NLP#5] Bayesian Model and NLP"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&is_video=false&description=[NLP#5] Bayesian Model and NLP"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[NLP#5] Bayesian Model and NLP&body=Check out this article: http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&title=[NLP#5] Bayesian Model and NLP"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/15/NLP-5-Bayesian-Model-and-NLP/&name=[NLP#5] Bayesian Model and NLP&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Zhihong Chen
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
