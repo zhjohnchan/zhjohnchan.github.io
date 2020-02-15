@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="一句话总结：参数共享的encoder编码句子，选取模板，然后再编码模板，最后decoder将句子和模板的隐藏状态作为输入，生成摘要。 1. 背景 动机：（1）目前的seq2seq模型利用源文本进行生成，然而在长文本生成上效果较差，容易重复；（2）基于文本的总结是一种传统的方法，填模板中的空，例如：[REGION] shares [open/close] [NUMBER] percent [low">
+<meta name="keywords" content="Text Summarization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization">
+<meta property="og:url" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/index.html">
+<meta property="og:site_name" content="Zhihong Chen">
+<meta property="og:description" content="一句话总结：参数共享的encoder编码句子，选取模板，然后再编码模板，最后decoder将句子和模板的隐藏状态作为输入，生成摘要。 1. 背景 动机：（1）目前的seq2seq模型利用源文本进行生成，然而在长文本生成上效果较差，容易重复；（2）基于文本的总结是一种传统的方法，填模板中的空，例如：[REGION] shares [open/close] [NUMBER] percent [low">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215181400365.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215185306582.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192612574.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215190636038.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215190847997.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215191456533.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215191615279.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192245570.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192259102.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192312073.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192411230.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192438264.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192454485.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192753878.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192937397.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193527888.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193545110.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193559439.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193625847.png">
+<meta property="og:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193706337.png">
+<meta property="og:updated_time" content="2020-02-15T11:42:23.425Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization">
+<meta name="twitter:description" content="一句话总结：参数共享的encoder编码句子，选取模板，然后再编码模板，最后decoder将句子和模板的隐藏状态作为输入，生成摘要。 1. 背景 动机：（1）目前的seq2seq模型利用源文本进行生成，然而在长文本生成上效果较差，容易重复；（2）基于文本的总结是一种传统的方法，填模板中的空，例如：[REGION] shares [open/close] [NUMBER] percent [low">
+<meta name="twitter:image" content="http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215181400365.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/02/13/MRG-2-NeurIPS-2018-Hybrid-Retrieval-Generation-Reinforced-Agent-for-Medical-Image-Report-Generation/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&text=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&is_video=false&description=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization&body=Check out this article: http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&name=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-背景"><span class="toc-number">1.</span> <span class="toc-text">1. 背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-方法"><span class="toc-number">2.</span> <span class="toc-text">2. 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-检索"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 检索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-联合重排序和重写"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 联合重排序和重写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-重写"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 重写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-学习"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-实验"><span class="toc-number">3.</span> <span class="toc-text">3. 实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-数据集"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 数据集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-评测度量"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 评测度量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-实现细节"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 实现细节</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-Baseline"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 Baseline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-信息评估"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 信息评估</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-语言质量评测"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 语言质量评测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-模板的有效性"><span class="toc-number">3.7.</span> <span class="toc-text">3.7 模板的有效性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-相关工作"><span class="toc-number">4.</span> <span class="toc-text">4. 相关工作</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        [TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Zhihong Chen</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-02-15T10:12:21.000Z" itemprop="datePublished">2020-02-15</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Text-Summarization/">Text Summarization</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215181400365.png" alt="image-20200215181400365"></p>
+<p><strong>一句话总结：</strong>参数共享的encoder编码句子，选取模板，然后再编码模板，最后decoder将句子和模板的隐藏状态作为输入，生成摘要。</p>
+<h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1. 背景"></a>1. 背景</h2><ul>
+<li>动机：（1）目前的seq2seq模型利用源文本进行生成，然而在长文本生成上效果较差，容易重复；（2）基于文本的总结是一种传统的方法，填模板中的空，例如：<em>[REGION] shares [open/close] [NUMBER] percent [lower/higher]</em>, e.g., “hong kong shares close #.# percent lower”，然而构建模板的过程是十分费时的；（3）soft-template：相似句子中频次最高的一句作为模板，结合seq2seq和template-based方法。</li>
+<li>工作：（1）Retrieve：利用一个信息检索平台提取模板；Rerank：排序模板；Rewrite：总结生成；（2）引入soft template；（3）拓展seq2seq成模板排序和模板意识的文本生成；（4）结合了基于信息检索和seq2seq相结合的模板生成模型。</li>
+</ul>
+<h2 id="2-方法"><a href="#2-方法" class="headerlink" title="2. 方法"></a>2. 方法</h2><p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215185306582.png" alt="image-20200215185306582"></p>
+<p>首先，给定语料库，过滤出句子模板，然后rerank和rewrite都使用参数共享的encoder，rerank找到显著值最大的模板，最后decoder同时利用模板和句子的隐藏状态进行生成。</p>
+<h3 id="2-1-检索"><a href="#2-1-检索" class="headerlink" title="2.1 检索"></a>2.1 检索</h3><ul>
+<li>检索工具：Lucene</li>
+</ul>
+<h3 id="2-2-联合重排序和重写"><a href="#2-2-联合重排序和重写" class="headerlink" title="2.2 联合重排序和重写"></a>2.2 联合重排序和重写</h3><p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192612574.png" alt="image-20200215192612574"></p>
+<ul>
+<li>利用Bi-RNN读取句子和模板：</li>
+</ul>
+<img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215190636038.png" alt="image-20200215190636038" style="zoom: 67%;">
+
+<p>其中，隐藏状态是两个方向的混合：</p>
+<img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215190847997.png" alt="image-20200215190847997" style="zoom:67%;">
+
+<ul>
+<li>重排序：使用ROUGH测量模板的真实分数：$s^{<em>}(r,y^{</em>})$，句子和模板的隐藏状态为Bi-RNN的输出：</li>
+</ul>
+<img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215191456533.png" alt="image-20200215191456533" style="zoom:67%;">
+
+<p>利用双线性网络预测模板和输入句子的分数：</p>
+<img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215191615279.png" alt="image-20200215191615279" style="zoom:67%;">
+
+<p>从而$s$和$s^{x}$的差异将提供seq2seq以监督信息。</p>
+<h3 id="2-3-重写"><a href="#2-3-重写" class="headerlink" title="2.3 重写"></a>2.3 重写</h3><ul>
+<li>利用encode的隐藏状态进行重写：</li>
+</ul>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192245570.png" alt="image-20200215192245570"></p>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192259102.png" alt="image-20200215192259102"></p>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192312073.png" alt="image-20200215192312073"></p>
+<h3 id="2-4-学习"><a href="#2-4-学习" class="headerlink" title="2.4 学习"></a>2.4 学习</h3><ul>
+<li>模板选择监督：</li>
+</ul>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192411230.png" alt="image-20200215192411230"></p>
+<ul>
+<li>语言模型监督：</li>
+</ul>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192438264.png" alt="image-20200215192438264"></p>
+<ul>
+<li>总损失函数：</li>
+</ul>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192454485.png" alt="image-20200215192454485"></p>
+<ul>
+<li>batch size：64，dropout：0.3，SGD，学习率：1，若损失没有下降则减半。</li>
+</ul>
+<h2 id="3-实验"><a href="#3-实验" class="headerlink" title="3. 实验"></a>3. 实验</h2><h3 id="3-1-数据集"><a href="#3-1-数据集" class="headerlink" title="3.1 数据集"></a>3.1 数据集</h3><ul>
+<li>数据集：Gigaword（ <a href="https://github.com/harvardnlp/sent-summary）" target="_blank" rel="noopener">https://github.com/harvardnlp/sent-summary）</a></li>
+</ul>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192753878.png" alt="image-20200215192753878"></p>
+<h3 id="3-2-评测度量"><a href="#3-2-评测度量" class="headerlink" title="3.2 评测度量"></a>3.2 评测度量</h3><ul>
+<li><p>指标：ROUGH</p>
+</li>
+<li><p>度量一个模板的分数（原文公式有误）：</p>
+</li>
+</ul>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215192937397.png" alt="image-20200215192937397"></p>
+<ul>
+<li>其他指标：LEN DIF，LESS 3，COPY，NEW NE。</li>
+</ul>
+<h3 id="3-3-实现细节"><a href="#3-3-实现细节" class="headerlink" title="3.3 实现细节"></a>3.3 实现细节</h3><ul>
+<li>beam size：5</li>
+</ul>
+<h3 id="3-4-Baseline"><a href="#3-4-Baseline" class="headerlink" title="3.4 Baseline"></a>3.4 Baseline</h3><ul>
+<li>ABS：CNN + NNLM</li>
+<li>ABS+：CNN + NNLM + hand-crafted features</li>
+<li>RAS-Elman：attentive CNN + RNN</li>
+<li>Featseq2seq：Seq2Seq + Handcrafted features</li>
+<li>Luong-NMT：两层LSTM</li>
+<li>OpenNMT：官方</li>
+<li>FTSum：encode fact</li>
+</ul>
+<h3 id="3-5-信息评估"><a href="#3-5-信息评估" class="headerlink" title="3.5 信息评估"></a>3.5 信息评估</h3><p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193527888.png" alt="image-20200215193527888"></p>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193545110.png" alt="image-20200215193545110"></p>
+<p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193559439.png" alt="image-20200215193559439"></p>
+<h3 id="3-6-语言质量评测"><a href="#3-6-语言质量评测" class="headerlink" title="3.6 语言质量评测"></a>3.6 语言质量评测</h3><p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193625847.png" alt="image-20200215193625847"></p>
+<h3 id="3-7-模板的有效性"><a href="#3-7-模板的有效性" class="headerlink" title="3.7 模板的有效性"></a>3.7 模板的有效性</h3><p><img src="/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/image-20200215193706337.png" alt="image-20200215193706337"></p>
+<h2 id="4-相关工作"><a href="#4-相关工作" class="headerlink" title="4. 相关工作"></a>4. 相关工作</h2><ul>
+<li>文本总结：早期工作（基于模板，语法树，机器翻译方法），最近（Seq2Seq）。</li>
+<li>利用手工提取的特征：命名实体，POS等。</li>
+<li>CopyNet</li>
+<li>收敛机制防止重复</li>
+<li>强化学习</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-背景"><span class="toc-number">1.</span> <span class="toc-text">1. 背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-方法"><span class="toc-number">2.</span> <span class="toc-text">2. 方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-检索"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 检索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-联合重排序和重写"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 联合重排序和重写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-重写"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 重写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-学习"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-实验"><span class="toc-number">3.</span> <span class="toc-text">3. 实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-数据集"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 数据集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-评测度量"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 评测度量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-实现细节"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 实现细节</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-Baseline"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 Baseline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-信息评估"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 信息评估</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-语言质量评测"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 语言质量评测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-模板的有效性"><span class="toc-number">3.7.</span> <span class="toc-text">3.7 模板的有效性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-相关工作"><span class="toc-number">4.</span> <span class="toc-text">4. 相关工作</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&text=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&is_video=false&description=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization&body=Check out this article: http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&title=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://chihungchan.com/2020/02/15/TS-1-ACL-2018-Retrieve-Rerank-and-Rewrite-Soft-Template-Based-Neural-Summarization/&name=[TS#1] (ACL 2018) Retrieve, Rerank and Rewrite: Soft Template Based Neural Summarization&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Zhihong Chen
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">HOME</a></li>
+         
+          <li><a href="/about/">ABOUT</a></li>
+         
+          <li><a href="/archives/">WRITING</a></li>
+         
+          <li><a href="/contacts/">CONTACTS</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
