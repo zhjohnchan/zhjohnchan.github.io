@@ -66,4 +66,4 @@ Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shen
 - Reviewers: ACL (2021), EMNLP (2020; 2022), NAACL (2022), COLING (2020), ARR (2021; 2022).
 
 ## About the Profile Photo
-The profile photo was generated when I was a year-three undergraduate student and just starting to learn about deep learning. My buddy Aobo Yu and I worked on a sketch colorization course project ([slides](https://github.com/zhjohnchan/zhjohnchan.github.io/tree/master/assets/files/dip_slides.pdf) at that time, haha) based on [StarGAN](https://github.com/yunjey/stargan). We drew the cartoon sketch by hand and colorized it automatically.
+The profile photo was generated when I was a year-three undergraduate student and just starting to learn about deep learning. My buddy Aobo Yu and I worked on a *sketch colorization* course project ([slides](https://github.com/zhjohnchan/zhjohnchan.github.io/tree/master/assets/files/dip_slides.pdf) at that time, haha) based on [StarGAN](https://github.com/yunjey/stargan). We drew the cartoon sketch by hand and colorized it automatically.
