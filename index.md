@@ -21,6 +21,22 @@ Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shen
 
 ## Publications
 
+- **Align, Reason and Learn: Enhancing Medical Vision-and-Language Pre-training with Knowledge**
+  <br>
+  **Zhihong Chen**, Guanbin Li and Xiang Wan
+  <br>
+  **ACMMM 2022**.
+  <br>
+  [[PDF](https://arxiv.org/pdf/2209.07118.pdf)] [[CODE](https://github.com/zhjohnchan/ARL)]
+
+- **Multi-Modal Masked Autoencoders for Medical Vision-and-Language Pre-Training**
+  <br>
+  **Zhihong Chen**, Yuhao Du, Jinpeng Hu, Yang Liu, Guanbin Li, Xiang Wan and Tsung-Hui Chang
+  <br>
+  **MICCAI 2022**.
+  <br>
+  [[PDF](https://arxiv.org/pdf/2209.07098.pdf)] [[CODE](https://github.com/zhjohnchan/M3AE)]
+
 - **Graph Enhanced Contrastive Learning for Radiology Findings Summarization**
   <br>
   Jinpeng Hu, Zhuo Li, **Zhihong Chen**, Zhen Li, Xiang Wan and Tsung-Hui Chang
