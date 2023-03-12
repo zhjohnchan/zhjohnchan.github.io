@@ -14,12 +14,14 @@ Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shen
 - **Medical Imaging:** Radiology Report Generation
 
 ## News
-
-- **[Jul. 2022]** Our paper is accepted to ACMMM 2022.
-- **[Apr. 2022]** Our paper is accepted to MICCAI 2022.
-- **[Feb. 2022]** Our paper is accepted to ACL 2022.
+- **[Mar. 2023]** One paper is accepted to CVPR 2023
+- **[Nov. 2022]** Two papers are accepted to AAAI 2023.
+- **[Jul. 2022]** One paper is accepted to ACMMM 2022.
+- **[Apr. 2022]** One paper is accepted to MICCAI 2022.
+- **[Feb. 2022]** One paper is accepted to ACL 2022.
 
 ## Publications
+
 
 - **Align, Reason and Learn: Enhancing Medical Vision-and-Language Pre-training with Knowledge**
   <br>
