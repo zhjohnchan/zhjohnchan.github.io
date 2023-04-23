@@ -4,16 +4,17 @@ layout: homepage
 
 ## About Me
 
-Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shenzhen. I am supervised jointly by Prof. [Xiang Wan](https://scholar.google.com/citations?user=e3_kWigAAAAJ&hl=en&oi=ao) and Prof. [Guanbin Li](http://guanbinli.com/). I also work closely with Prof. [Benyou Wang](https://wabyking.github.io/old.html). I received my B.Eng. degree from Sun Yat-sen University in 2019, and then became a Ph.D. student at CUHK(SZ). My research lies at the intersection of **vision** and **language**, mainly focusing on **representation learning**. I am always open to collaboration. Feel free to drop me an e-mail. :-)
+Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shenzhen. I am supervised jointly by Prof. [Xiang Wan](https://scholar.google.com/citations?user=e3_kWigAAAAJ&hl=en&oi=ao) and Prof. [Guanbin Li](http://guanbinli.com/). I also work closely with Prof. [Benyou Wang](https://wabyking.github.io/old.html). I received my B.Eng. degree from Sun Yat-sen University in 2019, and then became a Ph.D. student at CUHK(SZ). My research lies at the intersection of **vision+language** and **Large-scale Generative Models**. I am always open to collaboration. Feel free to drop me an e-mail. :-)
 
-<strong style="color:#e74d3c; font-weight:600">I am looking for an intern/postdoctoral position on **(Medical) Vision+Language**. I'd appreciate a ping if you see a job I might fit.</strong>
+<strong style="color:#e74d3c; font-weight:600">I am looking for an intern/postdoctoral position on **Vision+Language** and **Large Language Models**. I'd appreciate a ping if you see a job I might fit.</strong>
 
 ## Research Interests
 
-- **Vision+Language:** Representation Learning
-- **Medical Imaging:** Radiology Report Generation
+- **Vision+Language**
+- **Large Language Models** 
 
 ## News
+- **[Apr. 2023]** We are excited to release LLMZoo.
 - **[Mar. 2023]** One paper is accepted to CVPR 2023
 - **[Nov. 2022]** Two papers are accepted to AAAI 2023.
 - **[Jul. 2022]** One paper is accepted to ACMMM 2022.
@@ -21,7 +22,6 @@ Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shen
 - **[Feb. 2022]** One paper is accepted to ACL 2022.
 
 ## Publications
-
 
 - **Align, Reason and Learn: Enhancing Medical Vision-and-Language Pre-training with Knowledge**
   <br>
@@ -79,9 +79,17 @@ Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shen
   <br>
   [[PDF](https://ojs.aaai.org/index.php/AAAI/article/download/4924/4797)] <strong><i style="color:#e74d3c">Spotlight</i></strong>
 
+## Project
+
+- **LLM Zoo: democratizing ChatGPT**
+  <br>
+  **Project Leader**
+  <br>
+  [[Project Website]](https://github.com/FreedomIntelligence/LLMZoo)
+
 ## Services
 
-- Reviewers: ACL (2021), EMNLP (2020; 2022), NAACL (2022), COLING (2020), ARR (2021; 2022).
+- Reviewers: ACL (2021; 2022; 2023), EMNLP (2020; 2022), NAACL (2022), COLING (2020), ARR (2021; 2022; 2023).
 
 ## About the Profile Photo
 The profile photo was generated when I was a year-three undergraduate student and just starting to learn about deep learning. My buddy Aobo Yu and I worked on a *sketch colorization* course project ([slides](https://github.com/zhjohnchan/zhjohnchan.github.io/tree/master/assets/files/dip_slides.pdf) at that time, haha) based on [StarGAN](https://github.com/yunjey/stargan). We drew the cartoon sketch by hand and colorized it automatically.
