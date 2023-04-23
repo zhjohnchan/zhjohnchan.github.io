@@ -4,7 +4,7 @@ layout: homepage
 
 ## About Me
 
-Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shenzhen. I am supervised jointly by Prof. [Xiang Wan](https://scholar.google.com/citations?user=e3_kWigAAAAJ&hl=en&oi=ao) and Prof. [Guanbin Li](http://guanbinli.com/). I also work closely with Prof. [Benyou Wang](https://wabyking.github.io/old.html). I received my B.Eng. degree from Sun Yat-sen University in 2019, and then became a Ph.D. student at CUHK(SZ). My research lies at the intersection of **vision+language** and **Large-scale Generative Models**. I am always open to collaboration. Feel free to drop me an e-mail. :-)
+Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shenzhen. I am supervised jointly by Prof. [Xiang Wan](https://scholar.google.com/citations?user=e3_kWigAAAAJ&hl=en&oi=ao) and Prof. [Guanbin Li](http://guanbinli.com/). I also work closely with Prof. [Benyou Wang](https://wabyking.github.io/old.html). I received my B.Eng. degree from Sun Yat-sen University in 2019, and then became a Ph.D. student at CUHK(SZ). My research lies at the intersection of **vision+language** and **large-scale generative models**. I am always open to collaboration. Feel free to drop me an e-mail. :-)
 
 <strong style="color:#e74d3c; font-weight:600">I am looking for an intern/postdoctoral position on **Vision+Language** and **Large Language Models**. I'd appreciate a ping if you see a job I might fit.</strong>
 
