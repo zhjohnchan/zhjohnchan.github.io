@@ -14,12 +14,21 @@ Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shen
 - **Large Language Models** 
 
 ## News
-- **[Apr. 2023]** We are excited to release LLMZoo.
+- **[May  2023]** Three papers are accepted to ACL 2023.
+- **[Apr. 2023]** We are excited to release LLMZoo, including the `Phoenix` and `Chimera` models.
 - **[Mar. 2023]** One paper is accepted to CVPR 2023
 - **[Nov. 2022]** Two papers are accepted to AAAI 2023.
 - **[Jul. 2022]** One paper is accepted to ACMMM 2022.
 - **[Apr. 2022]** One paper is accepted to MICCAI 2022.
 - **[Feb. 2022]** One paper is accepted to ACL 2022.
+
+## Project
+
+- **LLM Zoo: democratizing ChatGPT**
+  <br>
+  **Project Leader**
+  <br>
+  [[Project Website]](https://github.com/FreedomIntelligence/LLMZoo)
 
 ## Publications
 
@@ -78,14 +87,6 @@ Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shen
   **AAAI 2019**.
   <br>
   [[PDF](https://ojs.aaai.org/index.php/AAAI/article/download/4924/4797)] <strong><i style="color:#e74d3c">Spotlight</i></strong>
-
-## Project
-
-- **LLM Zoo: democratizing ChatGPT**
-  <br>
-  **Project Leader**
-  <br>
-  [[Project Website]](https://github.com/FreedomIntelligence/LLMZoo)
 
 ## Services
 
