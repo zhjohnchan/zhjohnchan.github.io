@@ -15,7 +15,7 @@ Hi, I am a third-year Ph.D. student at The Chinese University of Hong Kong, Shen
 
 ## News
 - **[May  2023]** Three papers are accepted to ACL 2023.
-- **[Apr. 2023]** We are excited to release LLMZoo, including the `Phoenix` and `Chimera` models.
+- **[Apr. 2023]** We are excited to release LLMZoo, including the Phoenix and Chimera models.
 - **[Mar. 2023]** One paper is accepted to CVPR 2023
 - **[Nov. 2022]** Two papers are accepted to AAAI 2023.
 - **[Jul. 2022]** One paper is accepted to ACMMM 2022.
