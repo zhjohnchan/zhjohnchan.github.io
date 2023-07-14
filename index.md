@@ -45,7 +45,7 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
 #### 2023
 - **Towards Unifying Medical Vision-and-Language Pre-training via Soft Prompts**
   <br>
-  **Zhihong Chen<sup>#</sup>**, Shizhe Diao<sup>#</sup>, Benyou Wang, Guanbin Li and Xiang Wan
+  **Zhihong Chen<sup>*</sup>**, Shizhe Diao<sup>*</sup>, Benyou Wang, Guanbin Li and Xiang Wan
   <br>
   **ICCV 2023**.
   <br>
