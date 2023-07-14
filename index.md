@@ -45,21 +45,21 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
 #### 2023
 - **Towards Unifying Medical Vision-and-Language Pre-training via Soft Prompts**
   <br>
-  **Zhihong Chen***, Shizhe Diao*, Benyou Wang, Guanbin Li and Xiang Wan
+  **Zhihong Chen#**, Shizhe Diao#, Benyou Wang, Guanbin Li and Xiang Wan
   <br>
   **ICCV 2023**.
   <br>
 
 - **Bridging Vision and Language Encoders: Parameter-Efficient Tuning for Referring Image Segmentation**
   <br>
-  Zunnan Xu*, **Zhihong Chen***, Yong Zhang, Yibing Song, Xiang Wan and Guanbin Li
+  Zunnan Xu#, **Zhihong Chen#**, Yong Zhang, Yibing Song, Xiang Wan and Guanbin Li
   <br>
   **ICCV 2023**.
   <br>
 
 - **Toward expanding the scope of radiology report summarization to multiple anatomies and modalities**
   <br>
-  **Zhihong Chen***, Maya Varma*, Xiang Wan, Curtis P. Langlotz and Jean-Benoit Delbrouck*
+  **Zhihong Chen#**, Maya Varma#, Xiang Wan, Curtis P. Langlotz and Jean-Benoit Delbrouck#
   <br>
   **ACL 2023**.
   <br>
@@ -67,7 +67,7 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
 
 - **On the Difference of BERT-style and CLIP-style Text Encoders**
   <br>
-  **Zhihong Chen***, Guiming Hardy Chen*, Shizhe Diao, Xiang Wan and Benyou Wang
+  **Zhihong Chen#**, Guiming Hardy Chen#, Shizhe Diao, Xiang Wan and Benyou Wang
   <br>
   **Findings of ACL 2023**.
   <br>
@@ -83,7 +83,7 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
 
 - **Advancing Visual Grounding with Scene Knowledge: Benchmark and Method**
   <br>
-  **Zhihong Chen***, Ruifei Zhang*, Yibin Song, Xiang Wan and Guanbin Li
+  **Zhihong Chen#**, Ruifei Zhang#, Yibin Song, Xiang Wan and Guanbin Li
   <br>
   **CVPR 2023**
   <br>
