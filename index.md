@@ -32,10 +32,19 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
   [[Project Website]](https://github.com/FreedomIntelligence/LLMZoo)
 
 ## Publications
+### Survey Papers
+- **Pre-trained Language Models in Biomedical Domain: A Systematic Survey**
+  <br>
+  Benyou Wang, Qianqian Xie, Jiahuan Pei, **Zhihong Chen**, Prayag Tiwari, Zhao Li, and Jie Fu
+  <br>
+  **ACM Computing Surveys, 2023**.
+  <br>
+  [[PDF](https://arxiv.org/pdf/2110.05006.pdf)]
 
+### Research Papers
 - **Towards Unifying Medical Vision-and-Language Pre-training via Soft Prompts**
   <br>
-  Zhihong Chen, Shizhe Diao, Benyou Wang, Guanbin Li and Xiang Wan
+  **Zhihong Chen**, Shizhe Diao, Benyou Wang, Guanbin Li and Xiang Wan
   <br>
   **ICCV 2023**.
   <br>
