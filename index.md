@@ -42,6 +42,7 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
   [[PDF](https://arxiv.org/pdf/2110.05006.pdf)]
 
 ### Research Papers
+#### 2023
 - **Towards Unifying Medical Vision-and-Language Pre-training via Soft Prompts**
   <br>
   **Zhihong Chen**, Shizhe Diao, Benyou Wang, Guanbin Li and Xiang Wan
@@ -104,6 +105,7 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
   <br>
   [[PDF](https://ojs.aaai.org/index.php/AAAI/article/view/26515/26287)]
 
+#### 2022
 - **Align, Reason and Learn: Enhancing Medical Vision-and-Language Pre-training with Knowledge**
   <br>
   **Zhihong Chen**, Guanbin Li and Xiang Wan
@@ -128,6 +130,7 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
   <br>
   [[PDF](https://arxiv.org/pdf/2204.00203.pdf)] [[CODE](https://github.com/jinpeng01/AIG_CL)]
 
+#### 2021
 - **Cross-modal Memory Networks for Radiology Report Generation**
   <br>
   **Zhihong Chen**, Yaling Shen, Yan Song and Xiang Wan
@@ -144,6 +147,7 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
   <br>
   [[PDF](https://arxiv.org/pdf/2112.09925.pdf)] [[CODE](https://github.com/jinpeng01/WGSum)]
 
+#### 2020
 - **Generating Radiology Reports via Memory-driven Transformer**
   <br>
   **Zhihong Chen**, Yan Song, Tsung-Hui Chang and Xiang Wan.
@@ -152,6 +156,7 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
   <br>
   [[PDF](https://arxiv.org/pdf/2010.16056.pdf)] [[CODE](https://github.com/zhjohnchan/R2Gen)]
 
+#### 2019
 - **Hierarchical Attention Network for Image Captioning**
   <br>
   Weixuan Wang, **Zhihong Chen** and Haifeng Hu
