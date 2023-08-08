@@ -14,6 +14,7 @@ Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, She
 
 ## News
 - **[Jul. 2023]** Two papers are accepted to ICCV 2023.
+- **[Jun. 2023]** Leture given at CIP-SATT (中国中文信息学会《前沿技术讲习班》), [[slides]]().
 - **[May  2023]** Three papers are accepted to ACL 2023.
 - **[Apr. 2023]** We are excited to release LLMZoo, including the Phoenix and Chimera models.
 - **[Mar. 2023]** One paper is accepted to CVPR 2023
