@@ -1,0 +1,207 @@
+I"ç"<h2 id="about-me">About Me</h2>
+
+<p>Hi, I am a fourth-year Ph.D. student at The Chinese University of Hong Kong, Shenzhen, where I am supervised jointly by Prof. <a href="https://scholar.google.com/citations?user=e3_kWigAAAAJ&amp;hl=en&amp;oi=ao">Xiang Wan</a> and Prof. <a href="http://guanbinli.com/">Guanbin Li</a> and also work closely with Prof. <a href="https://wabyking.github.io/old.html">Benyou Wang</a>. Currently, I am a visiting student researcher at Stanford University. I received my B.Eng. degree from Sun Yat-sen University in 2019, and then became a Ph.D. student at CUHK(SZ). My research lies at the intersection of vision+language and large-scale generative models. <strong>I am always open to collaboration. Feel free to drop me an e-mail.</strong> :-)</p>
+
+<p><strong style="color:#e74d3c; font-weight:600">I am currently on the job market, looking for a faculty/research position on <strong>Vision+Language</strong>, <strong>Large Language Models</strong>, and their application in <strong>medicine</strong>. Iâ€™d appreciate a ping if you see a job I might fit.</strong></p>
+
+<h2 id="research-interests">Research Interests</h2>
+
+<ul>
+  <li><strong>Vision+Language</strong></li>
+  <li><strong>Large Language Models</strong></li>
+</ul>
+
+<h2 id="news">News</h2>
+<ul>
+  <li><strong>[Jul. 2023]</strong> Two papers are accepted to ICCV 2023.</li>
+  <li><strong>[Jun. 2023]</strong> Lecture at CIP-SATT.</li>
+  <li><strong>[May  2023]</strong> Three papers are accepted to ACL 2023.</li>
+  <li><strong>[Apr. 2023]</strong> We are excited to release LLMZoo, including the Phoenix and Chimera models.</li>
+  <li><strong>[Mar. 2023]</strong> One paper is accepted to CVPR 2023</li>
+  <li><strong>[Nov. 2022]</strong> Two papers are accepted to AAAI 2023.</li>
+  <li><strong>[Jul. 2022]</strong> One paper is accepted to ACMMM 2022.</li>
+  <li><strong>[Apr. 2022]</strong> One paper is accepted to MICCAI 2022.</li>
+  <li><strong>[Feb. 2022]</strong> One paper is accepted to ACL 2022.</li>
+</ul>
+
+<h2 id="project">Project</h2>
+
+<ul>
+  <li><strong>LLM Zoo: democratizing ChatGPT</strong>
+<br />
+<strong>Project Leader</strong>
+<br />
+<a href="https://github.com/FreedomIntelligence/LLMZoo">[Project Website]</a></li>
+</ul>
+
+<h2 id="publications">Publications</h2>
+<h3 id="survey-papers">Survey Papers</h3>
+<ul>
+  <li><strong>Pre-trained Language Models in Biomedical Domain: A Systematic Survey</strong>
+<br />
+Benyou Wang, Qianqian Xie, Jiahuan Pei, <strong>Zhihong Chen</strong>, Prayag Tiwari, Zhao Li, and Jie Fu
+<br />
+<strong>ACM Computing Surveys, 2023</strong>.
+<br />
+[<a href="https://arxiv.org/pdf/2110.05006.pdf">PDF</a>]</li>
+</ul>
+
+<h3 id="research-papers">Research Papers</h3>
+<h4 id="2023">2023</h4>
+<ul>
+  <li>
+    <p><strong>Towards Unifying Medical Vision-and-Language Pre-training via Soft Prompts</strong>
+<br />
+<strong>Zhihong Chen<sup>*</sup></strong>, Shizhe Diao<sup>*</sup>, Benyou Wang, Guanbin Li and Xiang Wan
+<br />
+<strong>ICCV 2023</strong>.
+<br /></p>
+  </li>
+  <li>
+    <p><strong>Bridging Vision and Language Encoders: Parameter-Efficient Tuning for Referring Image Segmentation</strong>
+<br />
+Zunnan Xu<sup>*</sup>, <strong>Zhihong Chen<sup>*</sup></strong>, Yong Zhang, Yibing Song, Xiang Wan and Guanbin Li
+<br />
+<strong>ICCV 2023</strong>.
+<br /></p>
+  </li>
+  <li>
+    <p><strong>Toward expanding the scope of radiology report summarization to multiple anatomies and modalities</strong>
+<br />
+<strong>Zhihong Chen<sup>*</sup></strong>, Maya Varma<sup>*</sup>, Xiang Wan, Curtis P. Langlotz and Jean-Benoit Delbrouck<sup>*</sup>
+<br />
+<strong>ACL 2023</strong>.
+<br />
+[<a href="https://aclanthology.org/2023.acl-short.41.pdf">PDF</a>]</p>
+  </li>
+  <li>
+    <p><strong>On the Difference of BERT-style and CLIP-style Text Encoders</strong>
+<br />
+<strong>Zhihong Chen<sup>*</sup></strong>, Guiming Hardy Chen<sup>*</sup>, Shizhe Diao, Xiang Wan and Benyou Wang
+<br />
+<strong>Findings of ACL 2023</strong>.
+<br />
+[<a href="https://arxiv.org/pdf/2306.03678">PDF</a>] [<a href="https://github.com/zhjohnchan/bert-clip-synesthesia">CODE</a>]</p>
+  </li>
+  <li>
+    <p><strong>Improving Radiology Summarization with Radiograph and Anatomy Prompts</strong>
+<br />
+Jinpeng Hu, <strong>Zhihong Chen</strong>, Yang Liu, Xiang Wan, and Tsung-Hui Chang.
+<br />
+<strong>Findings of ACL 2023</strong>.
+<br />
+[<a href="https://arxiv.org/pdf/2210.08303">PDF</a>]</p>
+  </li>
+  <li>
+    <p><strong>Advancing Visual Grounding with Scene Knowledge: Benchmark and Method</strong>
+<br />
+<strong>Zhihong Chen<sup>*</sup></strong>, Ruifei Zhang<sup>*</sup>, Yibin Song, Xiang Wan and Guanbin Li
+<br />
+<strong>CVPR 2023</strong>
+<br />
+[<a href="https://openaccess.thecvf.com/content/CVPR2023/papers/Song_Advancing_Visual_Grounding_With_Scene_Knowledge_Benchmark_and_Method_CVPR_2023_paper.pdf">PDF</a>] [<a href="https://github.com/zhjohnchan/SK-VG">CODE</a>]</p>
+  </li>
+  <li>
+    <p><strong>EASAL: Entity-Aware Subsequence-based Active Learning for Named Entity Recognition</strong>
+<br />
+Yang Liu, Jinpeng Hu, <strong>Zhihong Chen</strong>, Xiang Wan, and Tsung-Hui Chang
+<br />
+<strong>AAAI 2023</strong>.
+<br />
+[<a href="https://ojs.aaai.org/index.php/AAAI/article/view/26069/25841">PDF</a>]</p>
+  </li>
+  <li>
+    <p><strong>A Simple yet Effective Subsequence-Enhanced Approach for Cross-Domain NER</strong>
+<br />
+Jinpeng Hu, Dandan Guo, Yang Liu, Zhuo Li, <strong>Zhihong Chen</strong>, Xiang Wan, and Tsung-Hui Chang
+<br />
+<strong>AAAI 2023</strong>.
+<br />
+[<a href="https://ojs.aaai.org/index.php/AAAI/article/view/26515/26287">PDF</a>]</p>
+  </li>
+</ul>
+
+<h4 id="2022">2022</h4>
+<ul>
+  <li>
+    <p><strong>Align, Reason and Learn: Enhancing Medical Vision-and-Language Pre-training with Knowledge</strong>
+<br />
+<strong>Zhihong Chen</strong>, Guanbin Li and Xiang Wan
+<br />
+<strong>ACMMM 2022</strong>.
+<br />
+[<a href="https://arxiv.org/pdf/2209.07118.pdf">PDF</a>] [<a href="https://github.com/zhjohnchan/ARL">CODE</a>]</p>
+  </li>
+  <li>
+    <p><strong>Multi-Modal Masked Autoencoders for Medical Vision-and-Language Pre-Training</strong>
+<br />
+<strong>Zhihong Chen</strong>, Yuhao Du, Jinpeng Hu, Yang Liu, Guanbin Li, Xiang Wan and Tsung-Hui Chang
+<br />
+<strong>MICCAI 2022</strong>.
+<br />
+[<a href="https://arxiv.org/pdf/2209.07098.pdf">PDF</a>] [<a href="https://github.com/zhjohnchan/M3AE">CODE</a>]</p>
+  </li>
+  <li>
+    <p><strong>Graph Enhanced Contrastive Learning for Radiology Findings Summarization</strong>
+<br />
+Jinpeng Hu, Zhuo Li, <strong>Zhihong Chen</strong>, Zhen Li, Xiang Wan and Tsung-Hui Chang
+<br />
+<strong>ACL 2022</strong>.
+<br />
+[<a href="https://arxiv.org/pdf/2204.00203.pdf">PDF</a>] [<a href="https://github.com/jinpeng01/AIG_CL">CODE</a>]</p>
+  </li>
+</ul>
+
+<h4 id="2021">2021</h4>
+<ul>
+  <li>
+    <p><strong>Cross-modal Memory Networks for Radiology Report Generation</strong>
+<br />
+<strong>Zhihong Chen</strong>, Yaling Shen, Yan Song and Xiang Wan
+<br />
+<strong>ACL 2021</strong>.
+<br />
+[<a href="https://arxiv.org/pdf/2204.13258.pdf">PDF</a>] [<a href="https://github.com/zhjohnchan/R2GenCMN">CODE</a>]</p>
+  </li>
+  <li>
+    <p><strong>Word Graph Guided Summarization for Radiology Findings</strong>
+<br />
+Jinpeng Hu, Jianling Li, <strong>Zhihong Chen</strong>, Yaling Shen, Yan Song, Xiang Wan and Tsung-Hui Chang 
+<br />
+<strong>Findings of ACL 2021</strong>.
+<br />
+[<a href="https://arxiv.org/pdf/2112.09925.pdf">PDF</a>] [<a href="https://github.com/jinpeng01/WGSum">CODE</a>]</p>
+  </li>
+</ul>
+
+<h4 id="2020">2020</h4>
+<ul>
+  <li><strong>Generating Radiology Reports via Memory-driven Transformer</strong>
+<br />
+<strong>Zhihong Chen</strong>, Yan Song, Tsung-Hui Chang and Xiang Wan.
+<br />
+<strong>EMNLP 2020</strong>.
+<br />
+[<a href="https://arxiv.org/pdf/2010.16056.pdf">PDF</a>] [<a href="https://github.com/zhjohnchan/R2Gen">CODE</a>]</li>
+</ul>
+
+<h4 id="2019">2019</h4>
+<ul>
+  <li><strong>Hierarchical Attention Network for Image Captioning</strong>
+<br />
+Weixuan Wang, <strong>Zhihong Chen</strong> and Haifeng Hu
+<br />
+<strong>AAAI 2019</strong>.
+<br />
+[<a href="https://ojs.aaai.org/index.php/AAAI/article/download/4924/4797">PDF</a>] <strong><i style="color:#e74d3c">Spotlight</i></strong></li>
+</ul>
+
+<h2 id="services">Services</h2>
+
+<ul>
+  <li>Reviewers: ACL (2021; 2022; 2023), EMNLP (2020; 2022), NAACL (2022), COLING (2020), ARR (2021; 2022; 2023).</li>
+</ul>
+
+<h2 id="about-the-profile-photo">About the Profile Photo</h2>
+<p>The profile photo was generated when I was a year-three undergraduate student and just starting to learn about deep learning. My buddy Aobo Yu and I worked on a <em>sketch colorization</em> course project (<a href="https://github.com/zhjohnchan/zhjohnchan.github.io/tree/master/assets/files/dip_slides.pdf">slides</a> at that time, haha) based on <a href="https://github.com/yunjey/stargan">StarGAN</a>. We drew the cartoon sketch by hand and colorized it automatically.</p>
+:ET
